@@ -1,0 +1,9 @@
+[Unit]
+Description=Agentmail rootless mail container
+After=local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/runuser -u agentmail -- /usr/bin/env HOME=/home/agentmail /bin/sh /home/agentmail/agentmail-ssh-lab/start-vm-mail.sh
+TimeoutStartSec=120s
