@@ -606,7 +606,7 @@ mod tests {
     fn reads_uploaded_attachment_and_rejects_incomplete_upload() {
         use agentmail_worker::upload::write_frame;
         let patch = b"+ligne avec retour\r\n";
-        let body = "確認してください。\n";
+        let body = "確認してください.\n";
         let mut upload = Vec::new();
         write_frame(&mut upload, patch).unwrap();
         write_frame(&mut upload, body.as_bytes()).unwrap();
