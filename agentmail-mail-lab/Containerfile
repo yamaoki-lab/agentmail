@@ -1,0 +1,14 @@
+FROM docker.io/library/debian:13-slim
+ARG AGENTMAIL_TEST_TOOLS=
+RUN printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d \
+    && chmod +x /usr/sbin/policy-rc.d \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends postfix dovecot-imapd dovecot-lmtpd tini $AGENTMAIL_TEST_TOOLS \
+    && rm -rf /var/lib/apt/lists/* /usr/sbin/policy-rc.d \
+    && groupadd -g 5000 vmail \
+    && useradd -u 5000 -g vmail -M -s /usr/sbin/nologin vmail
+COPY postfix-main.cf /etc/postfix/main.cf
+COPY dovecot.conf /etc/dovecot/dovecot.conf
+COPY entrypoint.sh smoke.py agentmail-mailboxes /opt/mail-lab/
+COPY agentmail /opt/agentmail-ssh-lab
+ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", "/opt/mail-lab/entrypoint.sh"]
