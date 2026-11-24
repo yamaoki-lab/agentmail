@@ -31,7 +31,7 @@ print(json.dumps([request, parts]))
 def exercise(root, binary):
     path = root / "example.patch"
     patch = b"+keep trailing space \r\n+another line\n"
-    body = "説明は Markdown です。\n".encode()
+    body = "説明は Markdown です.\n".encode()
     path.write_bytes(patch)
     shim = root / "ssh"
     shim.write_text(SSH)

@@ -383,13 +383,13 @@ enum RegistrationStatus {
 pub(super) fn prepare(client: &Client, identity: &str, offline: bool) -> io::Result<()> {
     let scope = prepare_scope(identity).inspect_err(|error| {
         if error.kind() == io::ErrorKind::PermissionDenied || error.raw_os_error() == Some(libc::EROFS) {
-            eprintln!("ローカルの会話登録を書き込めません。サンドボックス内なら承認付きで prepare-session を再試行してください。");
+            eprintln!("ローカルに会話登録を書き込めません. サンドボックス内なら承認を得て prepare-session を再試行してください.");
         }
     })?;
     let blob = scope.public_blob()?;
     if offline {
-        println!("VM の状態は未確認です。必要な操作を メールホストの管理用 SSH で選んでください。");
-        println!("受信箱が無い場合に実行");
+        println!("VM の状態は未確認です. 必要な操作を選び, メールホストの管理用 SSH で実行してください.");
+        println!("受信箱がない場合に実行");
         scope.print_create();
         println!("受信箱が未割り当ての場合に実行");
         scope.print_bind(&blob);
@@ -410,13 +410,13 @@ pub(super) fn prepare(client: &Client, identity: &str, offline: bool) -> io::Res
         .output()?;
     if !output.status.success() {
         io::stderr().write_all(&output.stderr)?;
-        return Err(invalid("VM の登録状態を確認できません。サンドボックス内なら承認付きで prepare-session を再試行してください。VM の Agentmail ゲートウェイが旧版の場合は更新が必要です。オフラインでコマンドだけ表示するには --offline を指定してください。"));
+        return Err(invalid("VM の登録状態を確認できません. サンドボックス内なら承認を得て prepare-session を再試行してください. VM の Agentmail ゲートウェイが旧版の場合は更新が必要です. オフラインでコマンドだけ表示するには --offline を指定してください."));
     }
     let status: RegistrationStatus = serde_json::from_slice(&output.stdout)?;
     match status {
         RegistrationStatus::Missing => {
             println!(
-                "{} はまだありません。メールホストの管理用 SSH で以下を上から実行してください。",
+                "{} はまだありません. メールホストの管理用 SSH で以下を上から順に実行してください.",
                 scope.address()
             );
             scope.print_create();
@@ -424,7 +424,7 @@ pub(super) fn prepare(client: &Client, identity: &str, offline: bool) -> io::Res
         }
         RegistrationStatus::Unassigned => {
             println!(
-                "{} は作成済みで未割り当てです。メールホストの管理用 SSH で以下を実行してください。",
+                "{} は作成済みで未割り当てです. メールホストの管理用 SSH で以下を実行してください.",
                 scope.address()
             );
             scope.print_bind(&blob);
@@ -438,11 +438,11 @@ pub(super) fn prepare(client: &Client, identity: &str, offline: bool) -> io::Res
                 tool,
                 uuid,
             } = &scope.binding;
-            println!("{} は別の会話に割り当て済みです。引き継ぐ場合だけ メールホストの管理用 SSH で以下を実行してください。", scope.address());
+            println!("{} は別の会話に割り当て済みです. 引き継ぐ場合だけ, メールホストの管理用 SSH で以下を実行してください.", scope.address());
             println!("sudo -iu agentmail {ADMIN} rebind {identity} {old_tool} {old_uuid} {tool} {uuid} {blob}");
         }
         RegistrationStatus::ConversationInUse => {
-            return Err(invalid("この会話 ID には VM に別の割り当てがあるか、公開鍵が異なります。メールホストの管理用 SSH で agentmail-admin list を確認してください。"));
+            return Err(invalid("VM 側でこの会話 ID に別の割り当てがあるか, 公開鍵が異なります. メールホストの管理用 SSH で agentmail-admin list を実行して確認してください."));
         }
         RegistrationStatus::Registered => {
             let request = encode(
@@ -467,7 +467,7 @@ pub(super) fn prepare(client: &Client, identity: &str, offline: bool) -> io::Res
                 || String::from_utf8_lossy(&output.stdout).trim() != expected
             {
                 io::stderr().write_all(&output.stderr)?;
-                return Err(invalid("VM に同じ割り当てがありますが、専用鍵で whoami を確認できません。サンドボックス内なら承認付きで whoami を再試行してください。"));
+                return Err(invalid("VM に同じ割り当てがありますが, 専用鍵で whoami を確認できません. サンドボックス内なら承認を得て whoami を再試行してください."));
             }
             println!("{expected}");
         }
@@ -501,16 +501,16 @@ impl Scope {
         match self.binding.tool.as_str() {
             "claude" if cfg!(target_os = "macos") => {
                 println!(concat!(
-                    "Mac の通知監視を始める場合は、Mac の通常のターミナルで ",
-                    "agentmail watch-notifications を実行してください。",
-                    "既に監視中なら、VM での登録後にこの会話で ",
-                    "agentmail watch-notifications --resume を実行してください。"
+                    "Mac の通知監視を始める場合は, Mac の通常のターミナルで ",
+                    "agentmail watch-notifications を実行してください. ",
+                    "既に監視中なら, VM での登録後にこの会話で ",
+                    "agentmail watch-notifications --resume を実行してください."
                 ));
             }
             "codex" => {
                 println!(concat!(
-                    "VM の通知中継が停止中の場合は、VM の管理用 SSH で ",
-                    "sudo systemctl start agentmail-notify.service を実行してください。"
+                    "VM の通知中継が停止中の場合は, VM の管理用 SSH で ",
+                    "sudo systemctl start agentmail-notify.service を実行してください."
                 ));
             }
             _ => {}

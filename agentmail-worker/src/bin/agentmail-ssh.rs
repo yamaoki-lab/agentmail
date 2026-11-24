@@ -492,7 +492,7 @@ fn run() -> Result<Option<ExitStatus>, Box<dyn std::error::Error>> {
     };
     if status.code() == Some(255) {
         if let Some(scope) = scope {
-            eprintln!("{} の SSH 接続に失敗しました。サンドボックス内なら承認付きで同じコマンドを再試行してください。接続できても未登録の場合は prepare-session で VM の登録状態を確認してください。", scope.address());
+            eprintln!("{} の SSH 接続に失敗しました. サンドボックス内なら承認を得て同じコマンドを再試行してください. 接続はできても未登録の場合は, prepare-session で VM の登録状態を確認してください.", scope.address());
         }
     }
     Ok(Some(status))
