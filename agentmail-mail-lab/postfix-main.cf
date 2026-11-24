@@ -1,0 +1,12 @@
+compatibility_level = 3.10
+myhostname = mx.agentmail.test
+mydestination =
+inet_interfaces = loopback-only
+inet_protocols = ipv4
+virtual_mailbox_domains = agentmail.test
+virtual_mailbox_maps = hash:/etc/postfix/mailboxes
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+default_transport = error:External delivery is disabled in this lab
+smtpd_relay_restrictions = reject_unauth_destination
+smtpd_recipient_restrictions = reject_unlisted_recipient
+maillog_file = /dev/stdout
