@@ -1,0 +1,18 @@
+# Copy to agentmail.conf and edit. Use literal values, without shell quotes or $HOME.
+# Gateway as seen from the Mac.
+MAC_SSH_HOST=mail.example.test
+MAC_SSH_PORT=22
+MAC_IPV4=no
+MAC_SSH_KEY=/Users/you/.local/share/agentmail/bootstrap-key
+MAC_KNOWN_HOSTS=/Users/you/.ssh/agentmail-known-hosts
+
+# Gateway as seen from the Codex container.
+CODEX_SSH_HOST=host.containers.internal
+CODEX_SSH_PORT=22
+CODEX_IPV4=no
+CODEX_SSH_KEY=/home/codex/.local/share/agentmail/bootstrap-key
+CODEX_KNOWN_HOSTS=/home/codex/.ssh/agentmail-known-hosts
+
+# Absolute path on the Linux host, bind-mounted as the Codex container user's home.
+# This directory must belong to the host's codex user.
+CODEX_HOST_HOME=/srv/agentmail/codex-home
