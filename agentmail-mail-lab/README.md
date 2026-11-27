@@ -27,7 +27,7 @@ podman --cgroup-manager=cgroupfs logs --tail 80 agentmail-mail-lab
 podman --cgroup-manager=cgroupfs exec -it agentmail-mail-lab bash
 ```
 
-疎通テストでは, メールの送信, 返信, IMAP での既読操作, 宛先不明時の拒否, および Maildir への保存を確認する. また, ログイン後の IMAP CAPABILITY 応答で NOTIFY の有無も表示する. なお, 外部クライアント向けの SSH エントリポイント, 通知ワーカー, 運用用の identity は次の段階で対応する.
+疎通テストでは, メールの送信, 返信, IMAP での既読操作, 宛先不明時の拒否, および Maildir への保存を確認する. また, ログイン後の IMAP CAPABILITY 応答で NOTIFY の有無も表示する. SSH 接続と通知は [クライアントの設定](../agentmail-worker/README.md) を参照する.
 
 ## IMAP NOTIFY の新着イベント検証
 
@@ -42,11 +42,11 @@ IMAP NOTIFY で受信箱の監視を始めたあとにテストメールを 1 �
 
 ## 受信箱の追加
 
-VM 側で既存のメールコンテナを起動し, 配布アーカイブの `agentmail-mailboxes-lab/` を `agentmail` ユーザのホームに展開する. そのユーザで `sh manage-vm-mailboxes.sh install` を一度実行する.
+VM 側で既存のメールコンテナを起動し, [SSH ゲートウェイの設定](../agentmail-worker/README.md#メールホスト) に従って管理スクリプトを配置する. そのユーザで `sh manage-vm-mailboxes.sh install` を一度実行する.
 
 ```sh
 sh manage-vm-mailboxes.sh identity list
 sh manage-vm-mailboxes.sh identity create lan-check
 ```
 
-`create` はメールアドレスを既存の Maildir ボリューム内に登録し, Postfix と Dovecot の設定に反映する. SMTP で宛先が受け付けられ, IMAP で受信箱を開けたときに `READY` を表示する. コマンドを再実行した場合は同じ受信箱を再利用する. また, 登録情報はコンテナの起動時に再適用される. 現段階では, リモート接続用の SSH 鍵は引き続き `alpha` と `beta` に固定されており, セッションへの割り当てと引き継ぎは後続の段階で対応する.
+`create` はメールアドレスを既存の Maildir ボリューム内に登録し, Postfix と Dovecot の設定に反映する. SMTP で宛先が受け付けられ, IMAP で受信箱を開けたときに `READY` を表示する. コマンドを再実行した場合は同じ受信箱を再利用する. また, 登録情報はコンテナの起動時に再適用される. 会話への割り当てと引き継ぎには `agentmail-admin` を使う.
