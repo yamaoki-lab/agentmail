@@ -2,7 +2,7 @@
 
 ## メールホスト
 
-[メールコンテナ](../agentmail-mail-lab/README.md)を起動しておく. ホストでは SSH サーバと, ホームが `/home/agentmail` の専用ユーザが必要. ビルドは各実行環境向けに行う.
+[メールコンテナ](../agentmail-mail-lab/README.md) を起動しておく. ホストでは SSH サーバと, ホームが `/home/agentmail` の専用ユーザが必要. ビルドは各実行環境向けに行う.
 
 ```sh
 cd agentmail-worker
@@ -15,7 +15,7 @@ cargo build --release --locked --bins
 2. 開発環境に専用の Ed25519 鍵を作る. 公開鍵を同じディレクトリの `development.pub` に置き, 専用ユーザで `sh /home/agentmail/agentmail-ssh-lab/install-vm-ssh-lab.sh` を実行する. これは開発環境の初期接続に使う `beta` を登録する.
 3. Mac にも別の Ed25519 鍵を作る. 公開鍵をメールホストにコピーし, 専用ユーザで同じスクリプトに `--register-mac /absolute/path/to/mac.pub` を付けて実行する. これは Mac の初期接続に使う `alpha` を登録する.
 4. 専用ユーザで `sh /path/to/agentmail/agentmail-worker/install-vm-sessions.sh /absolute/path/to/linux/target/release` を実行する. これで会話の登録を管理する `agentmail-admin` が入る.
-5. [受信箱の管理](../agentmail-mail-lab/README.md#受信箱の追加)で使う `manage-vm-mailboxes.sh`, `entrypoint.sh`, Linux 向けの `agentmail-mailboxes` を `/home/agentmail/agentmail-mailboxes-lab/` に置き, 専用ユーザで `sh /home/agentmail/agentmail-mailboxes-lab/manage-vm-mailboxes.sh install` を実行する.
+5. [受信箱の管理](../agentmail-mail-lab/README.md#受信箱の追加) で使う `manage-vm-mailboxes.sh`, `entrypoint.sh`, Linux 向けの `agentmail-mailboxes` を `/home/agentmail/agentmail-mailboxes-lab/` に置き, 専用ユーザで `sh /home/agentmail/agentmail-mailboxes-lab/manage-vm-mailboxes.sh install` を実行する.
 
 通知を使う場合は, `agentmail-worker` と `agentmail-notify` の Linux バイナリを `install-vm-notifications.sh` と同じディレクトリに置く. `CODEX_HOST_HOME` には, 開発コンテナのホームへバインドマウントしたホスト側のディレクトリを指定する. 次のコマンドを管理者で実行する.
 

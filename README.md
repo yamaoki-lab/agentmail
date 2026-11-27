@@ -8,7 +8,7 @@
 - 開発コンテナ内の Codex が通知を受けるには, メールホストと Unix ソケットを共有できるようにする.
 - Mac の Claude Code は, メールホストへ SSH で接続する. クライアントとフックは Mac 上でソースからビルドする.
 
-[メールコンテナの作成と疎通](agentmail-mail-lab/README.md)を行い, [SSH ゲートウェイとクライアントの設定](agentmail-worker/README.md)に進む. 接続先とファイルのパスは [agentmail.conf.example](agentmail.conf.example) をコピーして設定する.
+[メールコンテナの作成と疎通](agentmail-mail-lab/README.md) を行い, [SSH ゲートウェイとクライアントの設定](agentmail-worker/README.md) に進む. 接続先とファイルのパスは [agentmail.conf.example](agentmail.conf.example) をコピーして設定する.
 
 ## 使い方
 
