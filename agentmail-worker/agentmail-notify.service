@@ -1,0 +1,16 @@
+[Unit]
+Description=Agentmail IMAP notification bridge
+Requires=agentmail-mail.service
+After=agentmail-mail.service
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/agentmail/host.env
+ExecStart=/usr/local/lib/agentmail-notify/agentmail-notify
+Restart=always
+RestartSec=5s
+KillMode=mixed
+TimeoutStopSec=20s
+
+[Install]
+WantedBy=multi-user.target
